@@ -1,5 +1,18 @@
 # ResQNet AI — Crisis Response Intelligence System
 
+[![Python](https://img.shields.io/badge/Python-3.11%2B-3776AB?logo=python&logoColor=white)](https://www.python.org/)
+[![FastAPI](https://img.shields.io/badge/FastAPI-Backend-009688?logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
+[![SQLite](https://img.shields.io/badge/SQLite-Default%20DB-003B57?logo=sqlite&logoColor=white)](https://www.sqlite.org/)
+[![React](https://img.shields.io/badge/React-Dashboard-61DAFB?logo=react&logoColor=111111)](https://react.dev/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-Frontend-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![Vite](https://img.shields.io/badge/Vite-Build-646CFF?logo=vite&logoColor=white)](https://vite.dev/)
+[![pytest](https://img.shields.io/badge/pytest-Tested-0A9EDC?logo=pytest&logoColor=white)](https://docs.pytest.org/)
+[![OpenAI](https://img.shields.io/badge/OpenAI-Optional%20AI-412991?logo=openai&logoColor=white)](https://openai.com/)
+[![ElevenLabs](https://img.shields.io/badge/ElevenLabs-Voice%20Intake-111111)](https://elevenlabs.io/)
+[![UN SDGs](https://img.shields.io/badge/UN%20SDGs-3%20%7C%2011%20%7C%2013-2F9E44)](https://sdgs.un.org/goals)
+[![Last Commit](https://img.shields.io/github/last-commit/vergisodd/ResQnet-AI)](https://github.com/vergisodd/ResQnet-AI/commits/main)
+[![Repo Size](https://img.shields.io/github/repo-size/vergisodd/ResQnet-AI)](https://github.com/vergisodd/ResQnet-AI)
+
 ResQNet AI is a hackathon prototype command center that turns emergency reports into classified incidents, priority scores, optimized resource assignments, and a coordinator-ready command briefing.
 
 
