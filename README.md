@@ -10,7 +10,7 @@
 [![OpenAI](https://img.shields.io/badge/OpenAI-Optional%20AI-412991?logo=openai&logoColor=white)](https://openai.com/)
 [![ElevenLabs](https://img.shields.io/badge/ElevenLabs-Voice%20Intake-111111)](https://elevenlabs.io/)
 [![UN SDGs](https://img.shields.io/badge/UN%20SDGs-3%20%7C%2011%20%7C%2013-2F9E44)](https://sdgs.un.org/goals)
-
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 
 ResQNet AI is a hackathon prototype command center that turns emergency reports into classified incidents, priority scores, optimized resource assignments, and a coordinator-ready command briefing.
