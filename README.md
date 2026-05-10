@@ -216,6 +216,30 @@ Recommended live-demo path:
 2. Review Reports analyzed, Critical cases, Units deployed, Unassigned, and Response time saved.
 3. Show the crisis map, deployment lines, top incidents, and command briefing.
 
+## Docker Setup
+
+Run the full FastAPI app and dashboard with Docker Compose:
+
+```bash
+docker compose up --build
+```
+
+Then open:
+
+```text
+http://127.0.0.1:8000/dashboard
+```
+
+The compose setup stores the default SQLite database in a named Docker volume
+called `resqnet-data`. Optional API keys can be provided through a local `.env`
+file or shell environment variables before starting the container.
+
+To stop the app:
+
+```bash
+docker compose down
+```
+
 ## Smoke Test
 
 ```bash
