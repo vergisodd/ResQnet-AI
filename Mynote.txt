@@ -1,0 +1,54 @@
+
+Phase 1
+
+    Twilio number / ElevenLabs agent
+    → ElevenLabs post-call webhook
+    → local backend via ngrok
+    → Neon Postgres
+    → conversations table
+
+
+
+
+
+
+
+Pipeline Flow
+
+Detect newly created conversation records.
+Read the raw_payload_json field from the conversations table.
+Extract important fields from the already-processed JSON payload.
+Normalize and organize the extracted information.
+Save the structured data into a dedicated table.
+
+Important Clarification
+
+The incoming data has already been processed by an LLM model before reaching this system.
+
+This phase is NOT responsible for:
+
+calling an LLM
+generating AI summaries
+performing AI reasoning
+sending prompts to AI APIs
+
+This phase is only responsible for:
+
+organizing existing processed data
+extracting critical fields
+normalizing structure
+improving query performance
+separating raw payloads from structured business data
+
+Purpose
+
+The goal is to transform large raw JSON payloads into clean, searchable, relational database records that can later be used for:
+
+dashboards
+CRM systems
+analytics
+workflow automation
+lead management
+appointment systems
+reporting
+filtering and search

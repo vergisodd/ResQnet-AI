@@ -1,0 +1,1 @@
+const t={progress:0,velocity:0};function c(s){const n=r(s);t.velocity=n-t.progress,t.progress=n}function a(s,n,e){const o=r((e-s)/(n-s));return o*o*(3-2*o)}function r(s){return Math.min(1,Math.max(0,s))}export{a,t as b,c as s};

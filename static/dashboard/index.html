@@ -1,0 +1,280 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ResQNet AI - Crisis Response Command Center</title>
+  <meta name="description" content="ResQNet AI turns emergency voice reports into scored decisions and optimized response assignments." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="./vendor/leaflet/leaflet.css" />
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to dashboard</a>
+  <div class="ambient-field" aria-hidden="true">
+    <span class="orb orb-cyan"></span>
+    <span class="orb orb-violet"></span>
+    <span class="orb orb-amber"></span>
+  </div>
+  <div class="cursor-glow" aria-hidden="true"></div>
+  <div id="toast-stack" class="toast-stack" aria-live="polite"></div>
+
+  <header class="topbar">
+    <a class="brand" href="#top" aria-label="ResQNet AI dashboard home">
+      <span class="brand-mark" aria-hidden="true">RQ</span>
+      <span>
+        <strong>ResQNet <em>AI</em></strong>
+        <small>Crisis response intelligence</small>
+      </span>
+    </a>
+
+    <nav class="mode-switch" aria-label="Data source">
+      <button class="mode-pill active" id="btn-source-demo" type="button" data-source="demo">Demo Ops</button>
+      <button class="mode-pill" id="btn-source-voice" type="button" data-source="voice">Voice Calls</button>
+    </nav>
+
+    <div class="topbar-actions">
+      <span id="backend-pill" class="status-pill status-pending"><span class="dot"></span>Connecting</span>
+      <button class="btn btn-ghost" id="btn-refresh" type="button">Refresh</button>
+    </div>
+  </header>
+
+  <main class="page" id="main-content">
+    <section class="hero-shell" id="top" aria-labelledby="hero-title">
+      <div class="hero-visual toronto-canvas-shell cinematic-scene-shell" aria-hidden="true">
+        <div class="scene-frame scene-frame--toronto">
+          <canvas id="hero3d-canvas" data-engine="three.js r182"></canvas>
+          <div class="hero-visual-vignette"></div>
+          <div class="scene-label">Toronto network model</div>
+        </div>
+      </div>
+      <div class="hero-content reveal">
+        <span class="eyebrow">Toronto smart-response command layer</span>
+        <h1 id="hero-title">ResQNet AI</h1>
+        <p class="mission-kicker">A cinematic crisis dashboard where voice reports become structured decisions, scored risk, and explainable resource assignments.</p>
+        <div class="hero-actions">
+          <button class="btn btn-primary btn-xl" id="btn-full-demo" type="button"><span class="btn-icon">Run</span>Run Full Judge Demo</button>
+          <button class="btn btn-secondary" id="btn-optimize" type="button">Optimize Current Mode</button>
+          <button class="btn btn-secondary" id="btn-plan" type="button">Generate Briefing</button>
+        </div>
+        <ul class="kpi-row" aria-label="Live response indicators">
+          <li><strong id="outcome-reports">-</strong><span>Reports analyzed</span></li>
+          <li><strong id="outcome-critical">-</strong><span>Critical cases</span></li>
+          <li><strong id="outcome-deployed">-</strong><span>Units deployed</span></li>
+          <li><strong><span id="outcome-saved">-</span>%</strong><span id="outcome-distance">Time saved</span></li>
+        </ul>
+      </div>
+
+    </section>
+
+    <section id="backend-down" class="alert-panel hidden">
+      <div>
+        <h2>Backend unavailable</h2>
+        <p>Start FastAPI, then retry the dashboard connection.</p>
+        <pre><code>uvicorn app.main:app --reload --port 8000</code></pre>
+      </div>
+      <button class="btn btn-primary" id="btn-retry" type="button">Retry connection</button>
+    </section>
+
+    <section class="control-strip reveal" aria-label="Command actions">
+      <button class="btn btn-secondary" id="btn-simulate" type="button">Generate Demo Scenario</button>
+      <button class="btn btn-secondary" id="btn-plan-2" type="button">Generate Briefing</button>
+      <a class="btn btn-ghost" href="/docs" target="_blank" rel="noreferrer">API Console</a>
+      <div class="control-note">
+        <strong id="active-source-label">Demo Ops</strong>
+        <span id="outcome-unassigned">-</span> unassigned cases need follow-up capacity.
+      </div>
+    </section>
+
+    <section class="cockpit-grid reveal">
+      <article class="panel map-panel">
+        <div class="panel-head">
+          <div>
+            <span class="section-label">Operating Picture</span>
+            <h2>Crisis Map</h2>
+          </div>
+          <div class="legend" aria-label="Map legend">
+            <span><i class="legend-dot critical"></i>Critical</span>
+            <span><i class="legend-dot high"></i>High</span>
+            <span><i class="legend-dot medium"></i>Medium</span>
+            <span><i class="legend-dot low"></i>Low</span>
+            <span><i class="legend-dot resource"></i>Resource</span>
+          </div>
+        </div>
+        <div id="map" class="map" role="application" aria-label="Crisis incident and resource map"></div>
+      </article>
+
+      <aside class="side-rail">
+        <article class="panel timeline-panel">
+          <div class="panel-head compact">
+            <div>
+              <span class="section-label">Workflow</span>
+              <h2>Mission Timeline</h2>
+            </div>
+          </div>
+          <div class="timeline" id="timeline">
+            <div class="skeleton-line wide"></div>
+            <div class="skeleton-line"></div>
+            <div class="skeleton-line short"></div>
+          </div>
+        </article>
+
+        <article class="panel priority-panel">
+          <div class="panel-head compact">
+            <div>
+              <span class="section-label">Triage</span>
+              <h2>Top Priority Reports</h2>
+            </div>
+          </div>
+          <div id="top-incidents" class="priority-list">
+            <div class="skeleton-card"></div>
+            <div class="skeleton-card"></div>
+          </div>
+        </article>
+      </aside>
+    </section>
+
+    <section class="panel briefing-panel reveal" id="command-briefing">
+      <div class="panel-head">
+        <div>
+          <span class="section-label">Coordinator Output</span>
+          <h2>Command Briefing</h2>
+        </div>
+        <div class="panel-actions">
+          <button class="btn btn-ghost btn-sm" id="btn-copy-brief" type="button">Copy Markdown</button>
+          <button class="btn btn-ghost btn-sm" id="btn-print-brief" type="button">Print</button>
+        </div>
+      </div>
+      <div class="briefing-meta">
+        <span>Generated by ResQNet AI</span>
+        <span id="briefing-timestamp">Awaiting briefing</span>
+      </div>
+      <div id="briefing" class="briefing-body">
+        <div class="skeleton-line wide"></div>
+        <div class="skeleton-line"></div>
+        <div class="skeleton-line short"></div>
+      </div>
+    </section>
+
+    <section class="panel reveal" id="deployments-section">
+      <div class="panel-head">
+        <div>
+          <span class="section-label">Resource Allocation</span>
+          <h2>Optimized Deployment</h2>
+        </div>
+      </div>
+      <div id="assignments" class="deployment-grid">
+        <div class="skeleton-card"></div>
+        <div class="skeleton-card"></div>
+      </div>
+    </section>
+
+    <section class="panel reveal">
+      <div class="panel-head">
+        <div>
+          <span class="section-label">Decision Intelligence</span>
+          <h2>Prioritized Reports</h2>
+        </div>
+      </div>
+      <div class="filter-row" id="incident-filters" aria-label="Incident filters">
+        <button class="filter-chip active" data-filter="all" type="button">All</button>
+        <button class="filter-chip" data-filter="critical" type="button">Critical</button>
+        <button class="filter-chip" data-filter="high" type="button">High</button>
+        <button class="filter-chip" data-filter="medical" type="button">Medical</button>
+        <button class="filter-chip" data-filter="rescue" type="button">Rescue</button>
+        <button class="filter-chip" data-filter="mass-care" type="button">Food / Water / Shelter</button>
+        <button class="filter-chip" data-filter="unassigned" type="button">Unassigned</button>
+      </div>
+      <div class="table-wrap">
+        <table class="data-table" id="incident-table">
+          <thead>
+            <tr>
+              <th>Score</th>
+              <th>Risk</th>
+              <th>Location</th>
+              <th>Need</th>
+              <th>People</th>
+              <th>Status</th>
+              <th>Explanation</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td colspan="7">
+                <div class="skeleton-line wide"></div>
+                <div class="skeleton-line"></div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="lower-grid reveal">
+      <article class="panel">
+        <div class="panel-head compact">
+          <div>
+            <span class="section-label">Fleet Status</span>
+            <h2>Resource Fleet</h2>
+          </div>
+        </div>
+        <div id="resources" class="fleet-grid">
+          <div class="skeleton-card compact"></div>
+          <div class="skeleton-card compact"></div>
+        </div>
+      </article>
+
+      <article class="panel">
+        <div class="panel-head compact">
+          <div>
+            <span class="section-label">Manual Intake</span>
+            <h2>Submit Emergency Report</h2>
+          </div>
+        </div>
+        <form id="intake-form" class="form">
+          <label>Report text
+            <textarea name="report_text" rows="4" required placeholder="Example: Three elderly residents trapped without power on King Street; two need oxygen."></textarea>
+          </label>
+          <div class="form-row">
+            <label>Location
+              <input name="location_name" required placeholder="King Street West" />
+            </label>
+            <label>Latitude
+              <input name="latitude" type="number" step="0.0001" value="43.6532" required />
+            </label>
+            <label>Longitude
+              <input name="longitude" type="number" step="0.0001" value="-79.3832" required />
+            </label>
+          </div>
+          <button class="btn btn-primary" type="submit">Submit Emergency Report</button>
+          <div id="intake-result" class="intake-result"></div>
+        </form>
+      </article>
+    </section>
+
+    <section class="panel ibm-panel reveal">
+      <div class="panel-head">
+        <div>
+          <span class="section-label">IBM Extension Path</span>
+          <h2>Enterprise Alignment</h2>
+        </div>
+      </div>
+      <div id="ibm-panel" class="ibm-grid">
+        <div class="skeleton-card compact"></div>
+        <div class="skeleton-card compact"></div>
+        <div class="skeleton-card compact"></div>
+      </div>
+    </section>
+
+    <footer class="footer">
+      ResQNet AI is a local hackathon prototype using a classical explainable optimizer. IBM, Qiskit, watsonx, IBM Z, and OpenShift are honest extension paths, not deployed integrations.
+    </footer>
+  </main>
+
+  <script src="./vendor/leaflet/leaflet.js"></script>
+  <script type="module" src="./three-scene.js"></script>
+  <script src="./app.js" defer></script>
+</body>
+</html>
