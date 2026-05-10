@@ -1,0 +1,5 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Security vulnerability
+    url: https://github.com/vergisodd/ResQnet-AI/security
+    about: Please do not open public issues for security-sensitive reports.

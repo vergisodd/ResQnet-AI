@@ -107,6 +107,8 @@ Detailed IBM framing is in [docs/ibm_alignment.md](docs/ibm_alignment.md).
 
 ## System Architecture
 
+![ResQNet AI architecture diagram](ResQNet_AI_Architecture_Diagram.png)
+
 ```mermaid
 flowchart LR
     A["ElevenLabs Post-Call Webhook"] --> B["conversations Raw Payload"]
